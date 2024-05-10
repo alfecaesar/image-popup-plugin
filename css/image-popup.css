@@ -1,0 +1,32 @@
+/* Custom CSS for Image Popup Plugin */
+
+.fancybox-container{
+    z-index: 999999 !important;
+}
+#image-popup-container{
+    display: none;
+}
+
+#image-popup-container.fancybox-content{
+    display: block;
+    padding: 0;
+    line-height: 0;
+    overflow: visible;
+}
+
+#image-popup-container.fancybox-content img{
+    max-width: 600px;
+    max-height: 600px;
+    width: 100%;
+}
+
+#image-popup-container.fancybox-content .fancybox-button{
+    display: none;
+}
+
+@media (min-width: 479px){
+    #image-popup-container.fancybox-content{
+        max-width: 600px;
+        max-height: 600px;
+    }
+}
