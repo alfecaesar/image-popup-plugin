@@ -1,0 +1,23 @@
+#image_popup_link .inside{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+#image_popup_link .inside > p{
+    flex: 1 1 50%;
+}
+
+#image_popup_link .inside input,
+#image_popup_link .inside select{
+    width: 100%;
+}
+
+#side-sortables #image_popup_link .inside{
+    flex-direction: column;
+    gap: 0;
+}
+
+#side-sortables #image_popup_link .inside > p{
+    flex: 1 1 100%;
+}

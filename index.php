@@ -312,9 +312,13 @@ add_action('wp_footer', 'image_popup_initialize_fancybox');
 function custom_post_type_admin_enqueue_scripts() {
     global $pagenow, $typenow;
 
-    // Check if we are on the edit.php page and it's your custom post type
-    if ($pagenow == 'edit.php' && $typenow == 'image_popup') { // Replace 'your_custom_post_type' with your actual custom post type slug
+    if ($pagenow == 'edit.php' && $typenow == 'image_popup') { 
         wp_enqueue_script('custom_post_type_admin_script', plugins_url('/js/image-popup-admin.js', __FILE__), array('jquery'), '', true);
     }
+
+    if ($pagenow == 'post.php' || $pagenow == 'edit.php'){
+        wp_enqueue_style('image-popup-admin-style', plugins_url('/css/image-popup-admin.css', __FILE__), array(), '1.0');
+    }
+   
 }
 add_action('admin_enqueue_scripts', 'custom_post_type_admin_enqueue_scripts'); 
