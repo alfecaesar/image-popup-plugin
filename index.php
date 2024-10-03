@@ -2,7 +2,7 @@
 /*
 Plugin Name: Image Popup Plugin
 Description: A WordPress plugin to select or upload images and display them as a popup on selected pages with publish and expiry dates using Fancybox.
-Version: 1.1.0
+Version: 1.2.0
 Author: Alfe Caesar Lagas
 */
 
