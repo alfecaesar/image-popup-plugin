@@ -20,8 +20,24 @@
     width: 100%;
 }
 
-#image-popup-container.fancybox-content .fancybox-button{
-    display: none;
+#image-popup-container.fancybox-content .fancybox-button {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #fff;
+}
+
+.swiper-button-next, .swiper-button-prev{
+  color: #fff;
+  text-shadow: 2px 2px 8px rgba(0,0,0, 0.8);
+}
+
+.fancybox-content{
+    background-color: transparent !important;
+}
+.fancybox-button {
+    background: rgba(30,30,30,.6) !important;
 }
 
 @media (min-width: 479px){

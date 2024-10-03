@@ -10,8 +10,10 @@ Author: Alfe Caesar Lagas
 function image_popup_enqueue_scripts() {
     wp_enqueue_script('jquery');
     wp_enqueue_script('fancybox', 'https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js', array('jquery'), '3.5.7', true);
+    wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), '11.1.14', true);
     wp_enqueue_style('fancybox-style', 'https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css', array(), '3.5.7');
-    wp_enqueue_style('image-popup-style', plugins_url('/css/image-popup.css', __FILE__), array(), '1.0.0');
+    wp_enqueue_style('swiper-style', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css', array(), '11.1.14');
+    wp_enqueue_style('image-popup-style', plugins_url('/css/image-popup.css', __FILE__), array(), '1.0.6');
 }
 add_action('wp_enqueue_scripts', 'image_popup_enqueue_scripts');
 
@@ -49,6 +51,7 @@ function image_popup_meta_boxes() {
     add_meta_box('image_popup_dates', 'Publish and Expiry Dates', 'image_popup_dates_callback', 'image_popup', 'side');
     add_meta_box('image_popup_pages', 'Select Pages', 'image_popup_pages_callback', 'image_popup', 'side');
     add_meta_box('image_popup_link', 'Image Link', 'image_popup_link_meta_box', 'image_popup', 'normal');
+    add_meta_box('image_popup_multiple_images', 'Multiple Images', 'image_popup_multiple_images_meta_box', 'image_popup', 'normal');
 }
 add_action('add_meta_boxes', 'image_popup_meta_boxes');
 
@@ -111,6 +114,55 @@ function image_popup_link_meta_box($post) {
     <?php
 }
 
+// Callback function for multiple images meta box
+function image_popup_multiple_images_meta_box($post) {
+    wp_nonce_field(basename(__FILE__), 'image_popup_media_nonce');
+    $image_id_2 = get_post_meta($post->ID, '_image_popup_media_id_2', true);
+    $image_url_2 = $image_id_2 ? wp_get_attachment_image_src($image_id_2, 'full')[0] : '';
+
+    $image_id_3 = get_post_meta($post->ID, '_image_popup_media_id_3', true);
+    $image_url_3 = $image_id_3 ? wp_get_attachment_image_src($image_id_3, 'full')[0] : '';
+
+    $image_id_4 = get_post_meta($post->ID, '_image_popup_media_id_4', true);
+    $image_url_4 = $image_id_4 ? wp_get_attachment_image_src($image_id_4, 'full')[0] : '';
+
+    $image_id_5 = get_post_meta($post->ID, '_image_popup_media_id_5', true);
+    $image_url_5 = $image_id_5 ? wp_get_attachment_image_src($image_id_5, 'full')[0] : '';
+    ?>
+    <p>
+        <label for="image_popup_media">Select Image 2:</label><br>
+        <img id="image_popup_media_preview_2" src="<?php echo esc_url($image_url_2); ?>" style="max-width: 100%; display: <?php echo $image_url_2 ? 'block' : 'none'; ?>" /><br>
+        <input type="hidden" id="image_popup_media_id_2" name="image_popup_media_id_2" value="<?php echo esc_attr($image_id_2); ?>" />
+        <button type="button" class="button" id="image_popup_media_button_2"><?php _e('Select or Upload Image'); ?></button>
+        <button type="button" class="button" id="image_popup_media_remove_button_2" style="display: <?php echo $image_url_2 ? 'inline-block' : 'none'; ?>"><?php _e('Remove Image'); ?></button>
+    </p>
+    <hr />
+    <p>
+        <label for="image_popup_media">Select Image 3:</label><br>
+        <img id="image_popup_media_preview_3" src="<?php echo esc_url($image_url_3); ?>" style="max-width: 100%; display: <?php echo $image_url_3 ? 'block' : 'none'; ?>" /><br>
+        <input type="hidden" id="image_popup_media_id_3" name="image_popup_media_id_3" value="<?php echo esc_attr($image_id_3); ?>" />
+        <button type="button" class="button" id="image_popup_media_button_3"><?php _e('Select or Upload Image'); ?></button>
+        <button type="button" class="button" id="image_popup_media_remove_button_3" style="display: <?php echo $image_url_3 ? 'inline-block' : 'none'; ?>"><?php _e('Remove Image'); ?></button>
+    </p>
+    <hr />
+    <p>
+        <label for="image_popup_media">Select Image 4:</label><br>
+        <img id="image_popup_media_preview_4" src="<?php echo esc_url($image_url_4); ?>" style="max-width: 100%; display: <?php echo $image_url_4 ? 'block' : 'none'; ?>" /><br>
+        <input type="hidden" id="image_popup_media_id_4" name="image_popup_media_id_4" value="<?php echo esc_attr($image_id_4); ?>" />
+        <button type="button" class="button" id="image_popup_media_button_4"><?php _e('Select or Upload Image'); ?></button>
+        <button type="button" class="button" id="image_popup_media_remove_button_4" style="display: <?php echo $image_url_4 ? 'inline-block' : 'none'; ?>"><?php _e('Remove Image'); ?></button>
+    </p>
+    <hr />
+    <p>
+        <label for="image_popup_media">Select Image 5:</label><br>
+        <img id="image_popup_media_preview_5" src="<?php echo esc_url($image_url_5); ?>" style="max-width: 100%; display: <?php echo $image_url_5 ? 'block' : 'none'; ?>" /><br>
+        <input type="hidden" id="image_popup_media_id_5" name="image_popup_media_id_5" value="<?php echo esc_attr($image_id_5); ?>" />
+        <button type="button" class="button" id="image_popup_media_button_5"><?php _e('Select or Upload Image'); ?></button>
+        <button type="button" class="button" id="image_popup_media_remove_button_5" style="display: <?php echo $image_url_5 ? 'inline-block' : 'none'; ?>"><?php _e('Remove Image'); ?></button>
+    </p>
+    <?php
+}
+
 // Save meta box data
 function image_popup_save_meta_box_data($post_id) {
     if (!isset($_POST['image_popup_nonce']) || !wp_verify_nonce($_POST['image_popup_nonce'], basename(__FILE__))) {
@@ -141,6 +193,22 @@ function image_popup_save_meta_box_data($post_id) {
     }
     if (isset($_POST['image_popup_link_target'])) {
         update_post_meta($post_id, '_image_popup_link_target', $_POST['image_popup_link_target']);
+    }
+    if (isset($_POST['image_popup_media_id_2'])) {
+        $media_id = intval($_POST['image_popup_media_id_2']);
+        update_post_meta($post_id, '_image_popup_media_id_2', $media_id);
+    }
+    if (isset($_POST['image_popup_media_id_3'])) {
+        $media_id = intval($_POST['image_popup_media_id_3']);
+        update_post_meta($post_id, '_image_popup_media_id_3', $media_id);
+    }
+    if (isset($_POST['image_popup_media_id_4'])) {
+        $media_id = intval($_POST['image_popup_media_id_4']);
+        update_post_meta($post_id, '_image_popup_media_id_4', $media_id);
+    }
+    if (isset($_POST['image_popup_media_id_5'])) {
+        $media_id = intval($_POST['image_popup_media_id_5']);
+        update_post_meta($post_id, '_image_popup_media_id_5', $media_id);
     }
 }
 add_action('save_post', 'image_popup_save_meta_box_data');
@@ -179,6 +247,51 @@ function display_popup_image_with_link() {
                 $link_url = get_post_meta($popup_post->ID, '_image_popup_link_url', true);
                 $link_target = get_post_meta($popup_post->ID, '_image_popup_link_target', true);
 
+                $image_id_2 = get_post_meta($popup_post->ID, '_image_popup_media_id_2', true);
+                $image_url_2 = $image_id_2 ? wp_get_attachment_image_src($image_id_2, 'full')[0] : '';
+
+                $image_id_3 = get_post_meta($popup_post->ID, '_image_popup_media_id_3', true);
+                $image_url_3 = $image_id_3 ? wp_get_attachment_image_src($image_id_3, 'full')[0] : '';
+
+                $image_id_4 = get_post_meta($popup_post->ID, '_image_popup_media_id_4', true);
+                $image_url_4 = $image_id_4 ? wp_get_attachment_image_src($image_id_4, 'full')[0] : '';
+
+                $image_id_5 = get_post_meta($popup_post->ID, '_image_popup_media_id_5', true);
+                $image_url_5 = $image_id_5 ? wp_get_attachment_image_src($image_id_5, 'full')[0] : '';
+
+                if($image_url_2){
+                    $img_elem_2 = '<div class="swiper-slide"><img src="' . esc_url($image_url_2) . '"></div>';
+                    $link_url = '';
+                }
+                else{
+                    $img_elem_2 = '';
+                }
+
+                if($image_url_3){
+                    $img_elem_3 = '<div class="swiper-slide"><img src="' . esc_url($image_url_3) . '"></div>';
+                    $link_url = '';
+                }
+                else{
+                    $img_elem_3 = '';
+                }
+
+                if($image_url_4){
+                    $img_elem_4 = '<div class="swiper-slide"><img src="' . esc_url($image_url_4) . '"></div>';
+                    $link_url = '';
+                }
+                else{
+                    $img_elem_4 = '';
+                }
+
+                if($image_url_5){
+                    $img_elem_5 = '<div class="swiper-slide"><img src="' . esc_url($image_url_5) . '"></div>';
+                    $link_url = '';
+                }
+                else{
+                    $img_elem_5 = '';
+                }
+                
+
                 if(!$link_target){
                     $link_target = '_self';
                 }
@@ -187,12 +300,39 @@ function display_popup_image_with_link() {
                 if( $image_url){
                     if ($link_url) {
                         // Output the popup image with link
-                        $image_element = '<div id="image-popup-container"><a target="'. $link_target .'" href="' . esc_url($link_url) . '"><img src="' . esc_url($image_url) . '" alt="' . esc_attr(get_the_title($popup_post->ID)) . '"></a></div>';
+                        $image_element = '
+                            <div id="image-popup-container">
+                                <a target="'. $link_target .'" href="' . esc_url($link_url) . '">
+                                    <img src="' . esc_url($image_url) . '" alt="' . esc_attr(get_the_title($popup_post->ID)) . '">
+                                </a>
+                                <button data-fancybox-close="" class="fancybox-button fancybox-button--close" title="Close">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <path d="M12 10.6L6.6 5.2 5.2 6.6l5.4 5.4-5.4 5.4 1.4 1.4 5.4-5.4 5.4 5.4 1.4-1.4-5.4-5.4 5.4-5.4-1.4-1.4-5.4 5.4z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        ';
                         echo $image_element;
                     }
                     else{
                         // Output the popup image without link
-                        $image_element = '<div id="image-popup-container"><img src="' . esc_url($image_url) . '" alt="' . esc_attr(get_the_title($popup_post->ID)) . '"></div>';
+                        $image_element = '
+                            <div id="image-popup-container">
+                                <div class="swiper popupSwiper">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide"><img src="' . esc_url($image_url) . '" alt="' . esc_attr(get_the_title($popup_post->ID)) . '"></div>
+                                        ' . $img_elem_2 . $img_elem_3 . $img_elem_4 . $img_elem_5 . '
+                                    </div>
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                                <button data-fancybox-close="" class="fancybox-button fancybox-button--close" title="Close">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <path d="M12 10.6L6.6 5.2 5.2 6.6l5.4 5.4-5.4 5.4 1.4 1.4 5.4-5.4 5.4 5.4 1.4-1.4-5.4-5.4 5.4-5.4-1.4-1.4-5.4 5.4z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        ';
                         echo $image_element;
                     }
                 }
@@ -296,8 +436,14 @@ function image_popup_initialize_fancybox() {
                     src:  '#image-popup-container',
                     type: 'inline',
                     clickContent: false,
-                    toolbar: true,
-                    buttons: ['close'],
+                    toolbar: false,
+                    buttons: [],
+                });
+                var swiper = new Swiper(".popupSwiper", {
+                    navigation: {
+                        nextEl: ".swiper-button-next",
+                        prevEl: ".swiper-button-prev",
+                    },
                 });
             }
         };
@@ -313,11 +459,12 @@ function custom_post_type_admin_enqueue_scripts() {
     global $pagenow, $typenow;
 
     if ($pagenow == 'edit.php' && $typenow == 'image_popup') { 
-        wp_enqueue_script('custom_post_type_admin_script', plugins_url('/js/image-popup-admin.js', __FILE__), array('jquery'), '', true);
+        wp_enqueue_script('custom_post_type_admin_script', plugins_url('/js/image-popup-admin.js', __FILE__), array('jquery'), '1.0.0', true);
     }
 
     if ($pagenow == 'post.php' || $pagenow == 'edit.php'){
         wp_enqueue_style('image-popup-admin-style', plugins_url('/css/image-popup-admin.css', __FILE__), array(), '1.0');
+        wp_enqueue_script('custom_post_type_admin_script', plugins_url('/js/image-popup-media.js', __FILE__), array('jquery'), '1.0.1', true);
     }
    
 }
