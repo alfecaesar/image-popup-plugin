@@ -2,7 +2,7 @@
 /*
 Plugin Name: Image Popup Plugin
 Description: A WordPress plugin to select or upload images and display them as a popup on selected pages with publish and expiry dates using Fancybox.
-Version: 1.2.0
+Version: 1.4.0
 Author: Alfe Caesar Lagas
 */
 
@@ -13,7 +13,7 @@ function image_popup_enqueue_scripts() {
     wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), '11.1.14', true);
     wp_enqueue_style('fancybox-style', 'https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css', array(), '3.5.7');
     wp_enqueue_style('swiper-style', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css', array(), '11.1.14');
-    wp_enqueue_style('image-popup-style', plugins_url('/css/image-popup.css', __FILE__), array(), '1.0.10');
+    wp_enqueue_style('image-popup-style', plugins_url('/css/image-popup.css', __FILE__), array(), '1.0.11');
 }
 add_action('wp_enqueue_scripts', 'image_popup_enqueue_scripts');
 
@@ -413,11 +413,18 @@ function display_popup_image_with_link() {
                 $link_text_5 = get_post_meta($popup_post->ID, '_image_popup_media_text_5', true);
                 $link_target_5 = get_post_meta($popup_post->ID, '_image_popup_media_target_5', true);
 
-                $link_class = '';
+                $link_class = 'btn-default';
+                $link_class_2 = 'btn-default';
+                $link_class_3 = 'btn-default';
+                $link_class_4 = 'btn-default';
+                $link_class_5 = 'btn-default';
 
                 if($image_url){
                     if($link_url){
                         $link_class = 'btn-full';
+                    }
+                    else{
+                        $link_url = '#';
                     }
                     if($link_text){
                         $link_class = 'btn-link';
@@ -436,6 +443,9 @@ function display_popup_image_with_link() {
                     if($link_url_2){
                         $link_class_2 = 'btn-full';
                     }
+                    else{
+                        $link_url_2 = '#';
+                    }
                     if($link_text_2){
                         $link_class_2 = 'btn-link';
                     }
@@ -452,6 +462,9 @@ function display_popup_image_with_link() {
                 if($image_url_3){
                     if($link_url_3){
                         $link_class_3 = 'btn-full';
+                    }
+                    else{
+                        $link_url_3 = '#';
                     }
                     if($link_text_3){
                         $link_class_3 = 'btn-link';
@@ -470,6 +483,9 @@ function display_popup_image_with_link() {
                     if($link_url_4){
                         $link_class_4 = 'btn-full';
                     }
+                    else{
+                        $link_url_4 = '#';
+                    }
                     if($link_text_4){
                         $link_class_4 = 'btn-link';
                     }
@@ -486,6 +502,9 @@ function display_popup_image_with_link() {
                 if($image_url_5){
                     if($link_url_5){
                         $link_class_5 = 'btn-full';
+                    }
+                    else{
+                        $link_url_5 = '#';
                     }
                     if($link_text_5){
                         $link_class_5 = 'btn-link';
@@ -623,11 +642,13 @@ function image_popup_initialize_fancybox() {
                     buttons: [],
                 });
                 var swiper = new Swiper(".popupSwiper", {
+                    initialSlide: 0,
                     navigation: {
                         nextEl: ".swiper-button-next",
                         prevEl: ".swiper-button-prev",
                     },
                 });
+                swiper.slideTo(0, false,false);
             }
         };
     </script>
